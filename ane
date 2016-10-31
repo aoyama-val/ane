@@ -30,10 +30,9 @@ delimiter = ARGV.shift || nil
 while line = gets
   line.chomp!
   fields = line.split(delimiter)
-  replaced = template
-  replaced = replaced.gsub("\\0", line)
-  fields.length.times do |i|
-    replaced = replaced.gsub("\\#{i + 1}", fields[i].strip)
-  end
+  replaced = template.gsub(/\\(\d+)/) {|x|
+    i = $1.to_i - 1
+    fields[i].nil? ? "" : fields[i].strip
+  }
   puts replaced
 end
